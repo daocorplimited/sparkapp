@@ -6,7 +6,7 @@ To run the application you can use just Kubernetes Client Kubectl using the foll
 
         kubectl apply -f spark-app.yaml -n spark
 
-It will work immediately but for the next run you need to adjust the parameter *metadata.name* for any another, because there could not be more than one application with the same name in a Kubernetes Cluster.
+It will work immediately but for the next run you need to adjust the parameter *metadata.name* to any another string, because there could not be more than one application with the same name in a Kubernetes Cluster.
 
 To make it programmatically invocable I have paramtrized it in a standard way with Helm (alternativelly Kustomize could be used). To run the parametrized SparkApplication, you need to call it as:
 
