@@ -1,0 +1,42 @@
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: spark-app-{{ .Values.runId }}
+  namespace: spark
+spec:
+  type: Scala
+  mode: cluster
+  image: "gcr.io/spark-operator/spark:v3.1.1"
+  imagePullPolicy: Always
+  mainClass: {{ .Values.mainClass }}
+  mainApplicationFile: {{ .Values.mainApplicationFile }}
+  sparkVersion: {{ .Values.sparkVersion }}
+  restartPolicy:
+    type: Never
+  volumes:
+    - name: "test-volume"
+      hostPath:
+        path: "/tmp"
+        type: Directory
+  driver:
+    cores: 1
+    coreLimit: "1200m"
+    memory: "512m"
+    labels:
+      version: 3.1.1
+    serviceAccount: spark
+    volumeMounts:
+      - name: "test-volume"
+        mountPath: "/tmp"
+  executor:
+    cores: 1
+    instances: {{ .Values.executor.instances }}
+    memory: {{ .Values.executor.memory }}
+    labels:
+      version: 3.1.1
+    volumeMounts:
+      - name: "test-volume"
+        mountPath: "/tmp"
+
+#kubectl create serviceaccount spark
+#kubectl create clusterrolebinding spark-role --clusterrole=edit --serviceaccount=default:spark --namespace=default
